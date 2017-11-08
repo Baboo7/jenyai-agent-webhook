@@ -39,9 +39,6 @@ const webhook = (req, res) => {
     }
   };
 
-  // #####
-  console.log(interaction);
-
   try {
     actionHandler(interaction)
     .then(() => {

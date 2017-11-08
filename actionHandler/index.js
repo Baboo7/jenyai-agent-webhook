@@ -12,8 +12,6 @@ const actions = require('./actions');
 */
 const actionHandler = interaction => {
 
-  // #####
-  console.log(interaction.action);
   let handler = actions[interaction.action];
 
   if (handler) {
