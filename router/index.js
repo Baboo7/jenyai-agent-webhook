@@ -1,5 +1,9 @@
+'use strict';
+
 let router = require('express').Router();
 
-// router.use('/route', function);
+const webhook = require('./webhook');
+
+router.post('/', webhook);
 
 module.exports = router;
