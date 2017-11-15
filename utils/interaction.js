@@ -61,6 +61,24 @@ class Interaction {
     this.followupEvent.name = name;
     this.followupEvent.data = data;
   }
+
+  /*  Add a TEXT message in message stack.
+
+    PARAM
+      text (string)
+
+    RETURN
+      none
+  */
+  addTextMessage(text) {
+
+    let message = {
+      type: 0,
+      speech: text
+    };
+
+    this.messages.push(message);
+  }
 }
 
 module.exports = Interaction;
