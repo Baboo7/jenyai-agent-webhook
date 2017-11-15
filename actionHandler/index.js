@@ -5,7 +5,7 @@ const actions = require('./actions');
 /*  Handle triggered actions.
 
   PARAM
-    interaction (object): contains main information from the agent
+    interaction (object): see Interaction class
 
   RETURN
     none
