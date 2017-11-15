@@ -1,22 +1,7 @@
 'use strict';
 
 const actionHandler = require('../actionHandler');
-
-/*  Handle requests from agent.
-
-  PARAM
-    res (object)
-    interaction (object): contains main information from the agent
-
-  RETURN
-    none
-*/
-const sendResponse = (res, interaction) => {
-  res.json({
-    contextOut: interaction.contexts,
-    followupEvent: interaction.followupEvent
-  });
-}
+const Interaction = require('../utils/interaction');
 
 /*  Handle requests from agent.
 
@@ -29,28 +14,20 @@ const sendResponse = (res, interaction) => {
 */
 const webhook = (req, res) => {
 
-  let interaction = {
-    sessionId: req.body.sessionId,
-    contexts: req.body.result.contexts,
-    action: req.body.result.action,
-    parameters: req.body.result.parameters,
-    followupEvent: {
-      data: { }
-    }
-  };
+  let interaction = new Interaction(req.body);
 
   try {
     actionHandler(interaction)
     .then(() => {
-      sendResponse(res, interaction);
+      res.json(interaction.response);
     })
     .catch(e => {
       console.log(e);
-      sendResponse(res, interaction);
+      res.json(interaction.response);
     });
   } catch(e) {
     console.log(e);
-    sendResponse(res, interaction);
+    res.json(interaction.response);
   }
 };
 
