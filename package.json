@@ -10,7 +10,11 @@
   "dependencies": {
     "axios": "^0.17.0",
     "body-parser": "^1.17.2",
-    "express": "^4.15.4"
+    "express": "^4.15.4",
+    "pg": "^7.3.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.11.3",
+    "sequelize-cli": "^3.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
