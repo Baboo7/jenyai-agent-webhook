@@ -3,12 +3,12 @@
 // Define a webhook interaction.
 class Interaction {
 
-  constructor(raw) {
-    this.sessionId = raw.sessionId;
-    this.contexts = raw.result.contexts;
-    this.action = raw.result.action;
-    this.parameters = raw.result.parameters;
-    this.messages = raw.result.fulfillment.messages;
+  constructor(options) {
+    this.sessionId = options.sessionId;
+    this.contexts = Object.assign([ ], options.contexts);
+    this.action = options.action;
+    this.parameters = Object.assign({ }, options.parameters);
+    this.messages = Object.assign([ ], options.messages);
 
     this.followupEvent = {
       data: { }

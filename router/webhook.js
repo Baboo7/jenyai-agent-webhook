@@ -14,7 +14,18 @@ const Interaction = require('../utils/interaction');
 */
 const webhook = (req, res) => {
 
-  let interaction = new Interaction(req.body);
+  let options = {
+    sessionId: req.body.sessionId,
+    contexts: req.body.result.contexts,
+    action: req.body.result.action,
+    parameters: req.body.result.parameters,
+    messages: req.body.result.fulfillment.messages
+  };
+
+  let interaction = new Interaction(options);
+
+  console.log(options);
+  console.log(interaction);
 
   try {
     actionHandler(interaction)
