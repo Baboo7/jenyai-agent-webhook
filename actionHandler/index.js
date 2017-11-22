@@ -14,9 +14,7 @@ const actionHandler = interaction => {
 
   let handler = actions[interaction.action];
 
-  if (handler) {
-    return handler(interaction);
-  }
+  if (handler) return handler(interaction);
 
   throw `unhandled action '${interaction.action}'`;
 };
