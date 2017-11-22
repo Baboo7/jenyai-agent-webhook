@@ -58,6 +58,8 @@ class Interaction {
   */
   setFollowupEvent(name, data) {
 
+    if (!data) data = { };
+
     this.followupEvent.name = name;
     this.followupEvent.data = data;
   }
