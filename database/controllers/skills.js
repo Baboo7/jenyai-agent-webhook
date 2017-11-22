@@ -36,10 +36,10 @@ const createSkill = (data, callback) => {
     || typeof data.skill === 'undefined'
     || typeof data.subskill === 'undefined'
     || typeof data.title === 'undefined') {
-      console.error('missing information to create skill ', data);
-      callback(true);
-      return;
-    }
+    console.error('missing information to create skill ', data);
+    callback(true);
+    return;
+  }
 
   controller
   .create({
@@ -149,12 +149,12 @@ const getSkill = (id, callback) => {
     PARAMS
       callback (function)
         err (boolean): true if error, undefined otherwise
-        list (object): all skills, undefined if error
+        list (object): all RAW skills, undefined if error
 
     RETURN
       none
 */
-const getAllSkills = (callback) => {
+const getAllSkills = callback => {
 
   if (!callback) callback = () => { };
 
@@ -169,10 +169,50 @@ const getAllSkills = (callback) => {
   });
 };
 
+/*  Retrieve skills by chapter.
+
+    PARAMS
+      data (object)
+      callback (function)
+        err (boolean): true if error, undefined otherwise
+        list (object): all RAW skills, undefined if error
+
+    RETURN
+      none
+*/
+const getSkillsByChapter = (data, callback) => {
+
+  if (!callback) callback = () => { };
+
+  // check all the required parameters are specified
+  if (!data
+    || typeof data.grade === 'undefined'
+    || typeof data.chapter === 'undefined') {
+    console.error('missing information to get skills by chapter', data);
+    callback(true);
+    return;
+  }
+
+  controller
+  .findAll({
+    where: {
+      grade: data.grade,
+      chapter: data.chapter
+    },
+    raw: true
+  })
+  .then(list => callback(undefined, list))
+  .catch(err => {
+    console.error(err);
+    callback(true);
+  });
+};
+
 module.exports = {
   createSkill: createSkill,
   deleteSkill: deleteSkill,
   updateSkill: updateSkill,
   getSkill: getSkill,
-  getAllSkills: getAllSkills
+  getAllSkills: getAllSkills,
+  getSkillsByChapter: getSkillsByChapter
 };
