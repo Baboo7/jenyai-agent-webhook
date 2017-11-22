@@ -21,6 +21,7 @@ const wikipedia = interaction => {
     if (!person) {
       interaction.setFollowupEvent('fallback');
       resolve();
+      return;
     }
 
     let url = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${person}&limit=1&namespace=0&format=json`;
