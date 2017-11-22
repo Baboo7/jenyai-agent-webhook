@@ -137,7 +137,7 @@ const getCard = (id, callback) => {
     PARAMS
       callback (function)
         err (boolean): true if error, undefined otherwise
-        list (object): all cards, undefined if error
+        list (object): all RAW cards, undefined if error
 
     RETURN
       none
@@ -157,10 +157,38 @@ const getAllCards = callback => {
   });
 };
 
+/*  Retrieve cards by skill id.
+
+    PARAMS
+      skillId (number): id of the skill the card should be associated with
+      callback (function)
+        err (boolean): true if error, undefined otherwise
+        list (object): all RAW cards associated to the skill, undefined if error
+
+    RETURN
+      none
+*/
+const getCardsBySkill = (skillId, callback) => {
+
+  if (!callback) callback = () => { };
+
+  controller
+  .findAll({
+    where: { skillId: skillId },
+    raw: true
+  })
+  .then(list => callback(undefined, list))
+  .catch(err => {
+    console.error(err);
+    callback(true);
+  });
+};
+
 module.exports = {
   createCard: createCard,
   deleteCard: deleteCard,
   updateCard: updateCard,
   getCard: getCard,
-  getAllCards: getAllCards
+  getAllCards: getAllCards,
+  getCardsBySkill: getCardsBySkill,
 };
