@@ -32,10 +32,6 @@ const webhook = (req, res) => {
     .then(() => {
       res.json(interaction.response);
     })
-    .catch(e => {
-      console.log(e);
-      res.json(interaction.response);
-    });
   } catch(e) {
     console.log(e);
     res.json(interaction.response);
