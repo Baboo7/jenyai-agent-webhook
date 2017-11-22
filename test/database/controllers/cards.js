@@ -12,13 +12,15 @@ describe('cards controller', () => {
       skillId: -1
     };
 
+    let getData = [ -1 ];
+
     controller.createCard(data, (err, newItem) => {
 
       if (err) {
         expect(true).to.equal(false);
         done();
       } else {
-        controller.getCardsBySkill(data.skillId, (err, gotItem) => {
+        controller.getCardsBySkill(getData, (err, gotItem) => {
 
           if (err) {
             expect(true).to.equal(false);

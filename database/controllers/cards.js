@@ -1,5 +1,6 @@
 'use strict';
 
+const Op = require('sequelize').Op;
 const controller = require('../models').cards;
 
 /*************************************
@@ -160,7 +161,7 @@ const getAllCards = callback => {
 /*  Retrieve cards by skill id.
 
     PARAMS
-      skillId (number): id of the skill the card should be associated with
+      skillsId (array of numbers): id of the skills the card should be associated with
       callback (function)
         err (boolean): true if error, undefined otherwise
         list (object): all RAW cards associated to the skill, undefined if error
@@ -168,13 +169,17 @@ const getAllCards = callback => {
     RETURN
       none
 */
-const getCardsBySkill = (skillId, callback) => {
+const getCardsBySkill = (skillsId, callback) => {
 
   if (!callback) callback = () => { };
 
   controller
   .findAll({
-    where: { skillId: skillId },
+    where: {
+      skillId: {
+        [Op.or]: skillsId
+      }
+    },
     raw: true
   })
   .then(list => callback(undefined, list))
