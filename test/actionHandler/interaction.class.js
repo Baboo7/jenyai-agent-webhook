@@ -1,6 +1,6 @@
 'use strict';
 
-let Interaction = require('../../utils/interaction');
+let Interaction = require('../../actionHandler/interaction.class');
 let expect = require('chai').expect;
 
 describe('interaction class', () => {

@@ -1,7 +1,7 @@
 'use strict';
 
 const actionHandler = require('../actionHandler');
-const Interaction = require('../utils/interaction');
+const Interaction = require('../actionHandler/interaction.class');
 
 /*  Handle requests from agent.
 
