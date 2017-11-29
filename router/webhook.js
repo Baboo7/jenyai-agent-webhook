@@ -24,14 +24,15 @@ const webhook = (req, res) => {
 
   let interaction = new Interaction(options);
 
-  console.log(options);
-  console.log(interaction);
-
   try {
     actionHandler(interaction)
     .then(() => {
       res.json(interaction.response);
     })
+    .catch(e => {
+      console.log(e);
+      res.json(interaction.response);
+    });
   } catch(e) {
     console.log(e);
     res.json(interaction.response);
