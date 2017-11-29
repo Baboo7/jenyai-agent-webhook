@@ -162,18 +162,13 @@ const getAllCards = callback => {
 
     PARAMS
       skillsId (array of numbers): id of the skills the card should be associated with
-      callback (function)
-        err (boolean): true if error, undefined otherwise
-        list (object): all RAW cards associated to the skill, undefined if error
 
     RETURN
-      none
+      Promise
 */
-const getCardsBySkill = (skillsId, callback) => {
+const getCardsBySkill = skillsId => {
 
-  if (!callback) callback = () => { };
-
-  controller
+  return controller
   .findAll({
     where: {
       skillId: {
@@ -181,11 +176,6 @@ const getCardsBySkill = (skillsId, callback) => {
       }
     },
     raw: true
-  })
-  .then(list => callback(undefined, list))
-  .catch(err => {
-    console.error(err);
-    callback(true);
   });
 };
 

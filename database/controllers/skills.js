@@ -144,6 +144,33 @@ const getSkill = (id, callback) => {
   });
 };
 
+/*  Retrieve a skill by acronym.
+
+    PARAMS
+      data (object)
+
+    RETURN
+      Promise
+*/
+const getSkillByAcronym = (data, callback) => {
+
+  if (!callback) callback = () => { };
+  if (!data.grade) data.grade = null;
+  if (!data.chapter) data.chapter = null;
+  if (!data.skill) data.skill = null;
+  if (!data.subskill) data.subskill = null;
+
+  return controller
+  .findOne({
+    where: {
+      grade: data.grade,
+      chapter: data.chapter,
+      skill: data.skill,
+      subskill: data.subskill
+    }
+  });
+};
+
 /*  Retrieve all skills.
 
     PARAMS
@@ -213,6 +240,7 @@ module.exports = {
   deleteSkill: deleteSkill,
   updateSkill: updateSkill,
   getSkill: getSkill,
+	getSkillByAcronym: getSkillByAcronym,
   getAllSkills: getAllSkills,
   getSkillsByChapter: getSkillsByChapter
 };
