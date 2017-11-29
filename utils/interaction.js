@@ -64,22 +64,84 @@ class Interaction {
     this.followupEvent.data = data;
   }
 
-  /*  Add a TEXT message in message stack.
+  /*  Create an text message.
 
     PARAM
       text (string)
 
     RETURN
-      none
+      (object) text message
   */
-  addTextMessage(text) {
+  createTextMessage(text) {
+
+    if (!text) throw new Error('no text provided');
 
     let message = {
       type: 0,
       speech: text
     };
 
-    this.messages.push(message);
+    return message;
+  }
+
+  /*  Create an image message.
+
+    PARAM
+      src (string): url to the image
+
+    RETURN
+      (object) image message
+  */
+  createImageMessage(src) {
+
+    if (!src) throw new Error('no image source provided');
+
+    let message = {
+      type: 4,
+      payload: {
+        "type": "image",
+        "src": src
+      }
+    };
+
+    return message;
+  }
+
+  /*  Replace a placeholder by a specified message.
+
+    PARAM
+      placeholder (string): name of the placeholder
+      message (object): message to replace the placeholder with
+
+    RETURN
+      (array of objects) new stack of messages
+  */
+  replacePlaceholder(placeholder, message) {
+
+    let phId = this.messages.findIndex(m => {
+      if (m.type === 4 && m.payload && m.payload.placeholder) return m.payload.placeholder === placeholder;
+    });
+
+    if (phId === -1) throw new Error(`no placeholder found for '${placeholder}'`);
+
+		let messages = Object.assign([ ], this.messages);
+
+    messages[phId] = message;
+
+    return messages;
+  }
+
+  /*  Set the new message stack.
+
+    PARAM
+      messages (array of objects): new message stack
+
+    RETURN
+      none
+  */
+  setMessages(messages) {
+
+    this.messages = messages;
   }
 }
 
