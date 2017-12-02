@@ -1,36 +1,35 @@
-'use strict';
+'use strict'
 
-const controller = require('../../database/controllers/skills');
+const controller = require('../../database/controllers/skills')
 
-/*  Get a skill from the database.
+/* Get a skill from the database.
 
-    PARAMS
-      req (object): request object. Must contain certain properties (see database/controllers/skills.js)
-      res (object): response object
+	PARAMS
+		req (object): request object. Must contain certain properties (see database/controllers/skills.js)
+		res (object): response object
 
-    RETURN
-      none
+	RETURN
+		none
 */
 const route = (req, res) => {
+	let id = req.params.id
 
-  let id = req.params.id;
+	// Get the skill
+	controller.getSkill(id, (err, skill) => {
+		if (err) {
+			let msg = {
+				error: `error while attempting to get skill ${id}`
+			}
 
-  // Get the skill
-  controller.getSkill(id, (err, skill) => {
-    if (err) {
-      let msg = {
-        error: `error while attempting to get skill ${id}`
-      };
+			return res.status(400).json(msg)
+		}
 
-      return res.status(400).json(msg);
-    }
+		let msg = {
+			skill: skill
+		}
 
-    let msg = {
-      skill: skill
-    };
+		return res.status(200).json(msg)
+	})
+}
 
-    return res.status(200).json(msg);
-  });
-};
-
-module.exports = route;
+module.exports = route

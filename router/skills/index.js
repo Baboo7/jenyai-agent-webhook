@@ -1,24 +1,24 @@
-'use strict';
+'use strict'
 
-let router = require('express').Router();
+let router = require('express').Router()
 
-const createSkill = require('./createSkill');
-const deleteSkill = require('./deleteSkill');
-const updateSkill = require('./updateSkill');
-const getSkill = require('./getSkill');
-const getAllSkills = require('./getAllSkills');
+const createSkill = require('./createSkill')
+const deleteSkill = require('./deleteSkill')
+const updateSkill = require('./updateSkill')
+const getSkill = require('./getSkill')
+const getAllSkills = require('./getAllSkills')
 
-/**** GET ****/
+/** ** GET ****/
 
-router.get('/', getAllSkills);
-router.get('/:id', getSkill);
+router.get('/', getAllSkills)
+router.get('/:id', getSkill)
 
-/**** POST ****/
+/** ** POST ****/
 
-router.post('/create', createSkill);
+router.post('/create', createSkill)
 
-router.post('/delete', deleteSkill);
+router.post('/delete', deleteSkill)
 
-router.post('/update', updateSkill);
+router.post('/update', updateSkill)
 
-module.exports = router;
+module.exports = router

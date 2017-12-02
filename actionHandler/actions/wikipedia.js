@@ -1,61 +1,56 @@
-'use strict';
+'use strict'
 
-const axios = require('axios');
+const axios = require('axios')
 
-/*  Retrieve description from wikipedia.
+/* Retrieve description from wikipedia.
 
-  PARAM
-    interaction (object): see Interaction class
-      parameters (object): must contain the properties
-        person (string): person to get the description
+	PARAM
+		interaction (object): see Interaction class
+			parameters (object): must contain the properties
+				person (string): person to get the description
 
-  RETURN
-    Promise
+	RETURN
+		Promise
 */
 const wikipedia = interaction => {
+	return new Promise((resolve, reject) => {
+		// Check for parameters
+		let person = interaction.getParameter('person')
+		if (!person) {
+			interaction.setFollowupEvent('fallback')
+			resolve()
+			return
+		}
 
-  return new Promise((resolve, reject) => {
+		let url = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${person}&limit=1&namespace=0&format=json`
 
-    // Check for parameters
-    let person = interaction.getParameter('person');
-    if (!person) {
-      interaction.setFollowupEvent('fallback');
-      resolve();
-      return;
-    }
+		axios.get(url)
+			.then(res => {
+				let beutifyPerson = res.data[1][0]
+				let description = res.data[2][0]
 
-    let url = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${person}&limit=1&namespace=0&format=json`;
+				if (!description ||
+				/may refer to:/.test(description)) {
+					let data = {
+						person: person
+					}
 
-    axios.get(url)
-    .then(res => {
+					interaction.setFollowupEvent('smalltalk_do_you_know_who_is-descr_not_found', data)
+				} else {
+					let data = {
+						person: beutifyPerson,
+						description: description
+					}
 
-      let beutifyPerson = res.data[1][0];
-      let description = res.data[2][0];
+					interaction.setFollowupEvent('smalltalk_do_you_know_who_is-descr_found', data)
+				}
 
-      if(!description ||
-        /may refer to:/.test(description)) {
+				resolve()
+			})
+			.catch(err => {
+				reject(err)
+			})
+	})
+}
 
-          let data = {
-            person: person
-          };
-
-          interaction.setFollowupEvent('smalltalk_do_you_know_who_is-descr_not_found', data);
-      } else {
-
-        let data = {
-          person: beutifyPerson,
-          description: description
-        };
-
-        interaction.setFollowupEvent('smalltalk_do_you_know_who_is-descr_found', data);
-      }
-
-      resolve();
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
-};
-
-module.exports = wikipedia;
+module.exports = wikipedia

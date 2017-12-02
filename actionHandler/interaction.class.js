@@ -1,148 +1,140 @@
-'use strict';
+'use strict'
 
 // Define a webhook interaction.
 class Interaction {
+	constructor (options) {
+		this.sessionId = options.sessionId
+		this.contexts = Object.assign([ ], options.contexts)
+		this.action = options.action
+		this.parameters = Object.assign({ }, options.parameters)
+		this.messages = Object.assign([ ], options.messages)
 
-  constructor(options) {
-    this.sessionId = options.sessionId;
-    this.contexts = Object.assign([ ], options.contexts);
-    this.action = options.action;
-    this.parameters = Object.assign({ }, options.parameters);
-    this.messages = Object.assign([ ], options.messages);
+		this.followupEvent = {
+			data: { }
+		}
+	}
 
-    this.followupEvent = {
-      data: { }
-    };
-  }
+	/*	Return a parameter.
 
-  /*  Return a parameter.
+		PARAM
+			key (string): name of the parameter
 
-    PARAM
-      key (string): name of the parameter
+		RETURN
+			(string | undefined) the parameter value if exists
+	*/
+	getParameter (key) {
+		return this.parameters[key]
+	}
 
-    RETURN
-      (string | undefined) the parameter value if exists
-  */
-  getParameter(key) {
+	/*	Conmpute the answer.
 
-    return this.parameters[key];
-  }
+		PARAM
+			none
 
-  /*  Conmpute the answer.
+		RETURN
+			(object) contains the information to send back to the agent
+	*/
+	get response () {
+		let response = {
+			contextOut: this.contexts,
+			followupEvent: this.followupEvent,
+			messages: this.messages
+		}
 
-    PARAM
-      none
+		return response
+	}
 
-    RETURN
-      (object) contains the information to send back to the agent
-  */
-  get response() {
+	/*	Set the followup event.
 
-    let response = {
-      contextOut: this.contexts,
-      followupEvent: this.followupEvent,
-      messages: this.messages
-    };
+		PARAM
+			name (string): name of the event
+			data (object): key-value representing the data held
 
-    return response;
-  }
+		RETURN
+			none
+	*/
+	setFollowupEvent (name, data) {
+		if (!data) data = { }
 
-  /*  Set the followup event.
+		this.followupEvent.name = name
+		this.followupEvent.data = data
+	}
 
-    PARAM
-      name (string): name of the event
-      data (object): key-value representing the data held
+	/*	Create an text message.
 
-    RETURN
-      none
-  */
-  setFollowupEvent(name, data) {
+		PARAM
+			text (string)
 
-    if (!data) data = { };
+		RETURN
+			(object) text message
+	*/
+	createTextMessage (text) {
+		if (!text) throw new Error('no text provided')
 
-    this.followupEvent.name = name;
-    this.followupEvent.data = data;
-  }
+		let message = {
+			type: 0,
+			speech: text
+		}
 
-  /*  Create an text message.
+		return message
+	}
 
-    PARAM
-      text (string)
+	/*	Create an image message.
 
-    RETURN
-      (object) text message
-  */
-  createTextMessage(text) {
+		PARAM
+			src (string): url to the image
 
-    if (!text) throw new Error('no text provided');
+		RETURN
+			(object) image message
+	*/
+	createImageMessage (src) {
+		if (!src) throw new Error('no image source provided')
 
-    let message = {
-      type: 0,
-      speech: text
-    };
+		let message = {
+			type: 4,
+			payload: {
+				'type': 'image',
+				'src': src
+			}
+		}
 
-    return message;
-  }
+		return message
+	}
 
-  /*  Create an image message.
+	/*	Replace a placeholder by a specified message.
 
-    PARAM
-      src (string): url to the image
+		PARAM
+			placeholder (string): name of the placeholder
+			message (object): message to replace the placeholder with
 
-    RETURN
-      (object) image message
-  */
-  createImageMessage(src) {
+		RETURN
+			(array of objects) new stack of messages
+	*/
+	replacePlaceholder (placeholder, message) {
+		let phId = this.messages.findIndex(m => {
+			if (m.type === 4 && m.payload && m.payload.placeholder) return m.payload.placeholder === placeholder
+		})
 
-    if (!src) throw new Error('no image source provided');
+		if (phId === -1) throw new Error(`no placeholder found for '${placeholder}'`)
 
-    let message = {
-      type: 4,
-      payload: {
-        "type": "image",
-        "src": src
-      }
-    };
+		let messages = Object.assign([ ], this.messages)
 
-    return message;
-  }
+		messages[phId] = message
 
-  /*  Replace a placeholder by a specified message.
+		return messages
+	}
 
-    PARAM
-      placeholder (string): name of the placeholder
-      message (object): message to replace the placeholder with
+	/*	Set the new message stack.
 
-    RETURN
-      (array of objects) new stack of messages
-  */
-  replacePlaceholder(placeholder, message) {
+		PARAM
+			messages (array of objects): new message stack
 
-    let phId = this.messages.findIndex(m => {
-      if (m.type === 4 && m.payload && m.payload.placeholder) return m.payload.placeholder === placeholder;
-    });
-
-    if (phId === -1) throw new Error(`no placeholder found for '${placeholder}'`);
-
-		let messages = Object.assign([ ], this.messages);
-
-    messages[phId] = message;
-
-    return messages;
-  }
-
-  /*  Set the new message stack.
-
-    PARAM
-      messages (array of objects): new message stack
-
-    RETURN
-      none
-  */
-  setMessages(messages) {
-
-    this.messages = messages;
-  }
+		RETURN
+			none
+	*/
+	setMessages (messages) {
+		this.messages = messages
+	}
 }
 
-module.exports = Interaction;
+module.exports = Interaction

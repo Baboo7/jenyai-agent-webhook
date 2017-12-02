@@ -1,24 +1,24 @@
-'use strict';
+'use strict'
 
-let router = require('express').Router();
+let router = require('express').Router()
 
-const createCard = require('./createCard');
-const deleteCard = require('./deleteCard');
-const updateCard = require('./updateCard');
-const getCard = require('./getCard');
-const getAllCards = require('./getAllCards');
+const createCard = require('./createCard')
+const deleteCard = require('./deleteCard')
+const updateCard = require('./updateCard')
+const getCard = require('./getCard')
+const getAllCards = require('./getAllCards')
 
-/**** GET ****/
+/** ** GET ****/
 
-router.get('/', getAllCards);
-router.get('/:id', getCard);
+router.get('/', getAllCards)
+router.get('/:id', getCard)
 
-/**** POST ****/
+/** ** POST ****/
 
-router.post('/create', createCard);
+router.post('/create', createCard)
 
-router.post('/delete', deleteCard);
+router.post('/delete', deleteCard)
 
-router.post('/update', updateCard);
+router.post('/update', updateCard)
 
-module.exports = router;
+module.exports = router
